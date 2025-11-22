@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Agri Market Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- <-- use blueprint static path -->
+  <link rel="stylesheet" href="/market/static/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-light">
+  <nav class="navbar navbar-dark bg-dark px-3">
+    <span class="navbar-brand">Agri Market App</span>
+  </nav>
+
+  <main class="container my-4">
+    <div class="card p-4 mb-4">
+      <form id="searchForm" class="row g-3">
+        <!-- commodity dropdown (replaced input with select) -->
+        <div class="col-md-5">
+          <select id="commodity" class="form-select" aria-label="Commodity select">
+            <option value="">Commodity (select)</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <select id="state" class="form-select" aria-label="State select">
+            <option value="">State (optional)</option>
+          </select>
+        </div>
+
+        <!-- button made green (btn-success) -->
+        <div class="col-md-2">
+          <button class="btn btn-success w-100" id="searchBtn" type="submit">Search</button>
+        </div>
+
+        <div class="col-md-2 text-end small text-muted align-self-center">
+          Source: data.gov.in
+        </div>
+      </form>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-7">
+        <div class="card p-3">
+          <h5>Modal Price Chart</h5>
+          <!-- chart will show label "Modal Price (₹/kg)" -->
+          <div style="position:relative; height:360px;">
+            <canvas id="priceChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-5">
+        <div class="card p-3">
+          <h5>Market Data</h5>
+          <div id="tableContainer" class="table-responsive" style="max-height:520px; overflow:auto;"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- <-- use blueprint static path for the script too -->
+  <script src="/market/static/script.js"></script>
+</body>
+</html>

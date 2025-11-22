@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Smart Agro | pH Analyzer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 font-inter">
+  <nav class="flex items-center justify-between bg-white p-4 shadow">
+    <h1 class="text-2xl font-bold text-green-700">🌿 Smart Agro</h1>
+    <div class="space-x-6">
+      <a href="{{ url_for('ph.index') }}" class="font-medium text-green-700">pH Analyzer</a>
+    </div>
+  </nav>
+
+  <main class="max-w-5xl mx-auto p-6">
+    <h2 class="text-4xl font-bold text-center mb-2">pH Analyzer</h2>
+    <p class="text-center mb-8 text-gray-600">Quick analysis — enter values and get instant guidance.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <form method="POST" action="{{ url_for('ph.analyze') }}" class="bg-white p-6 rounded-2xl shadow space-y-4">
+        <label class="block">
+          <span class="font-semibold">pH Value *</span>
+          <input type="number" step="0.1" name="ph" class="w-full border rounded p-2 mt-1" placeholder="Enter pH (0–14)" value="{{ ph or '' }}" required>
+        </label>
+
+        <div class="grid grid-cols-2 gap-4">
+          <label>
+            <span class="font-semibold">Area (m²)</span>
+            <input name="area" type="number" step="0.1" class="w-full border rounded p-2 mt-1" value="{{ area or 100 }}" required>
+          </label>
+          <label>
+            <span class="font-semibold">Volume (L)</span>
+            <input name="volume" type="number" step="0.1" class="w-full border rounded p-2 mt-1" value="{{ volume or 10 }}" required>
+          </label>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <label>
+            <span class="font-semibold">Soil Type</span>
+            <select name="soil" class="w-full border rounded p-2 mt-1">
+              <option {{ 'selected' if soil and soil|lower == 'loamy' else '' }}>Loamy</option>
+              <option {{ 'selected' if soil and soil|lower == 'sandy' else '' }}>Sandy</option>
+              <option {{ 'selected' if soil and soil|lower == 'clay' else '' }}>Clay</option>
+              <option {{ 'selected' if soil and soil|lower == 'peaty' else '' }}>Peaty</option>
+              <option {{ 'selected' if soil and soil|lower == 'saline' else '' }}>Saline</option>
+            </select>
+          </label>
+
+          <label>
+            <span class="font-semibold">Crop</span>
+            <select name="crop" class="w-full border rounded p-2 mt-1">
+              {% for c in ['Tomato','Wheat','Rice','Potato','Maize','Cotton','Soybean','Sugarcane','Chili','Coffee','Tea','Banana','Mango','Onion','Papaya'] %}
+                <option {{ 'selected' if crop and crop==c else '' }}>{{ c }}</option>
+              {% endfor %}
+            </select>
+          </label>
+        </div>
+
+        <!-- Environment knobs -->
+        <div class="grid grid-cols-3 gap-4">
+          <label>
+            <span class="font-semibold">Temperature (°C)</span>
+            <input name="temperature" type="number" step="0.1" class="w-full border rounded p-2 mt-1" value="{{ temperature or '' }}" placeholder="e.g. 18">
+          </label>
+          <label>
+            <span class="font-semibold">Moisture (%)</span>
+            <input name="moisture" type="number" step="0.1" class="w-full border rounded p-2 mt-1" value="{{ moisture or '' }}" placeholder="e.g. 30">
+          </label>
+          <label>
+            <span class="font-semibold">Organic Matter (%)</span>
+            <input name="organic_matter" type="number" step="0.1" class="w-full border rounded p-2 mt-1" value="{{ organic_matter or '' }}" placeholder="e.g. 3.5">
+          </label>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <label>
+            <span class="font-semibold">Soil depth to treat (cm)</span>
+            <input name="depth_cm" type="number" step="0.1" class="w-full border rounded p-2 mt-1" value="{{ depth_cm or 15 }}">
+          </label>
+          <label>
+            <span class="font-semibold">Notes (optional)</span>
+            <input name="notes" type="text" class="w-full border rounded p-2 mt-1" value="{{ notes or '' }}" placeholder="Extra details">
+          </label>
+        </div>
+
+        <button class="bg-green-700 hover:bg-green-800 text-white w-full py-2 rounded-lg">Analyze</button>
+      </form>
+
+      <div class="bg-white p-6 rounded-2xl shadow text-center">
+        <h3 class="text-xl font-bold mb-3">pH Sensor</h3>
+        <img src="{{ url_for('ph.static', filename='images/ph_sensor.png') }}" alt="pH Sensor" class="mx-auto w-60 mb-3">
+        <p class="text-gray-600">Tip: rinse probe in distilled water between samples and let it equilibrate.</p>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

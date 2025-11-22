@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Leaf Disease Detection</title>
+
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(135deg, #e3f2fd 0%, #f7f9fa 100%);
+        margin:0;
+        padding:20px;
+      }
+
+      .container {
+        max-width:1000px;
+        margin: 0 auto;
+      }
+
+      .header {
+        text-align:center;
+        margin: 1em 0;
+      }
+
+      .result-card {
+        background: rgba(255,255,255,0.95);
+        border-radius: 12px;
+        padding: 1.5em;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      }
+
+      .disease-title {
+        color:#1b5e20;
+        font-size:1.6em;
+        margin-bottom:0.5em
+      }
+
+      .section-title {
+        color:#1976d2;
+        margin-top:1em;
+        font-weight:600
+      }
+
+      .info-badge {
+        display:inline-block;
+        background:#e3f2fd;
+        color:#1976d2;
+        padding:0.25em 0.6em;
+        border-radius:6px;
+        margin-right:0.5em
+      }
+
+      .timestamp {
+        color:#616161;
+        text-align:right
+      }
+
+      .uploader {
+        display:flex;
+        gap:1rem;
+        align-items:center
+      }
+
+      img.preview {
+        max-width:300px;
+        border-radius:8px;
+        box-shadow:0 4px 12px rgba(0,0,0,0.06)
+      }
+
+      .flash {
+        color: #b00020;
+        margin-top: 1rem;
+      }
+
+      button {
+        background:#1565c0;
+        color:white;
+        border:none;
+        padding:0.6em 1.2em;
+        border-radius:6px;
+        cursor:pointer;
+      }
+
+      button:hover {
+        background:#0d47a1;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+
+      <!-- Page Header -->
+      <div class="header">
+        <div style="font-size:2.2em">🌿</div>
+        <h1 style="color:#1565c0; margin:0">Leaf Disease Detection</h1>
+        <p style="color:#616161">Upload a leaf image to detect diseases and get recommendations.</p>
+      </div>
+
+      <!-- Detection Form & Results -->
+      <div class="result-card">
+
+        <!-- FIXED FORM ACTION -->
+        <form action="{{ url_for('leaf.detect') }}" method="post" enctype="multipart/form-data">
+          <div class="uploader">
+            <input type="file" name="file" accept="image/*" required>
+            <button type="submit">🔍 Detect Disease</button>
+          </div>
+        </form>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="flash">{{ messages[0] }}</div>
+          {% endif %}
+        {% endwith %}
+
+        <!-- Results Section -->
+        {% if result %}
+
+          {% if result.disease_type == 'invalid_image' %}
+            <div class="disease-title">⚠️ Invalid Image</div>
+            <div style="color:#ff5722;">
+              Please upload a clear image of a plant leaf for accurate disease detection.
+            </div>
+
+            {% if result.symptoms %}
+              <div class="section-title">Issue</div>
+              <ul>
+                {% for s in result.symptoms %}
+                  <li>{{ s }}</li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+
+            {% if result.treatment %}
+              <div class="section-title">What to do</div>
+              <ul>
+                {% for t in result.treatment %}
+                  <li>{{ t }}</li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+
+          {% elif result.disease_detected %}
+            <div class="disease-title">🦠 {{ result.disease_name }}</div>
+
+            <div>
+              <span class="info-badge">Type: {{ result.disease_type }}</span>
+              <span class="info-badge">Severity: {{ result.severity }}</span>
+              <span class="info-badge">Confidence: {{ result.confidence }}%</span>
+            </div>
+
+            <div class="section-title">Symptoms</div>
+            <ul>
+              {% for s in result.symptoms %}
+                <li>{{ s }}</li>
+              {% endfor %}
+            </ul>
+
+            <div class="section-title">Possible Causes</div>
+            <ul>
+              {% for c in result.possible_causes %}
+                <li>{{ c }}</li>
+              {% endfor %}
+            </ul>
+
+            <div class="section-title">Treatment</div>
+            <ul>
+              {% for t in result.treatment %}
+                <li>{{ t }}</li>
+              {% endfor %}
+            </ul>
+
+            <div class="timestamp">🕒 {{ result.analysis_timestamp }}</div>
+
+          {% else %}
+            <div class="disease-title">✅ Healthy Leaf</div>
+            <div style="color:#4caf50">No disease detected. The plant appears healthy.</div>
+
+            <div style="margin-top:0.6em">
+              <span class="info-badge">Status: {{ result.disease_type or 'healthy' }}</span>
+              <span class="info-badge">Confidence: {{ result.confidence or 'N/A' }}%</span>
+            </div>
+
+            <div class="timestamp">🕒 {{ result.analysis_timestamp }}</div>
+          {% endif %}
+
+        {% endif %}
+      </div>
+    </div>
+  </body>
+</html>

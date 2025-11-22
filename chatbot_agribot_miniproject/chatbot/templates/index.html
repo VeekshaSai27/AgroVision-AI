@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriBot – Smart Farming Assistant</title>
+
+    <link rel="stylesheet" href="{{ url_for('chatbot.static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div>
+            <h1>🌾 AgriBot – Smart Farming Assistant</h1>
+            <p class="subtitle">Ask anything about crops, weather, soil, fertilizers & farming</p>
+        </div>
+    </header>
+
+    <!-- WEATHER CARD -->
+    <section class="card weather-card">
+        <h2>🌤 Current Weather</h2>
+
+        <div class="weather-details">
+            <p><strong>City:</strong> {{ city }}</p>
+            <p><strong>Country:</strong> {{ country }}</p>
+
+            <div class="weather-box">
+                <pre class="weather-pre">{{ weather }}</pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- CHAT SECTION -->
+    <section class="chat-container">
+
+        <!-- Chat History -->
+        <div class="chat-box">
+            {% if history %}
+                {% for item in history %}
+                    <div class="chat-msg user-msg">
+                        <span class="label">You:</span> {{ item.question }}
+                    </div>
+
+                    <div class="chat-msg bot-msg">
+                        <span class="label">AgriBot:</span>
+                        <pre class="bot-pre">{{ item.answer }}</pre>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="empty">No conversations yet. Ask your first question!</p>
+            {% endif %}
+        </div>
+
+        <!-- Ask Question -->
+        <form class="ask-form" method="POST" action="{{ url_for('chatbot.ask') }}">
+            <input type="text" name="question" placeholder="Ask anything about farming..." required>
+            <button type="submit">Ask</button>
+        </form>
+
+        <!-- Reset -->
+        <form method="POST" action="{{ url_for('chatbot.reset') }}">
+            <button class="reset-btn" type="submit">Reset Chat</button>
+        </form>
+
+    </section>
+
+    <!-- SUGGESTED QUESTIONS -->
+    <section class="suggestions">
+        <h3>Try Asking:</h3>
+
+        <div class="suggestion-list">
+            {% for q in [
+                "What crops can I grow this month?",
+                "How to increase soil fertility?",
+                "How to treat fungal disease in crops?",
+                "What fertilizer should I use for wheat?"
+            ] %}
+                <form method="POST" action="{{ url_for('chatbot.ask') }}">
+                    <input type="hidden" name="question" value="{{ q }}">
+                    <button type="submit">{{ q }}</button>
+                </form>
+            {% endfor %}
+        </div>
+    </section>
+
+</body>
+</html>

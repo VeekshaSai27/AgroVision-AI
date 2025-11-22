@@ -1,0 +1,7 @@
+# from plant_hyperspectral_cnn_miniproject/Plant_disease_detection/requirements.txt
+flask
+torch
+numpy
+scikit-learn
+matplotlib
+ollama

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Smart Agro | pH Analyzer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 font-inter">
+  <nav class="flex items-center justify-between bg-white p-4 shadow">
+    <h1 class="text-2xl font-bold text-green-700">🌿 Smart Agro</h1>
+    <div class="space-x-6">
+      <a href="/" class="font-medium text-green-700">pH Analyzer</a>
+    </div>
+  </nav>
+
+  <main class="max-w-5xl mx-auto p-6">
+    <h2 class="text-4xl font-bold text-center mb-2">pH Analyzer</h2>
+    <p class="text-center mb-8 text-gray-600">Get precise soil pH recommendations and treatment dosages.</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <form method="POST" action="{{ url_for('ph.analyze') }}" class="bg-white p-6 rounded-2xl shadow space-y-4">
+
+        <label class="block">
+          <span class="font-semibold">pH Value *</span>
+          <input type="number" step="0.1" name="ph" class="w-full border rounded p-2 mt-1" placeholder="Enter pH (0–14)" required>
+        </label>
+
+        <div class="grid grid-cols-2 gap-4">
+          <label>Volume (L)
+            <input name="volume" class="w-full border rounded p-2 mt-1" value="10" required>
+          </label>
+          <label>Area (m²)
+            <input name="area" class="w-full border rounded p-2 mt-1" value="100" required>
+          </label>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <label>Soil Type
+            <select name="soil" class="w-full border rounded p-2 mt-1">
+              <option>Loamy</option>
+              <option>Sandy</option>
+              <option>Clay</option>
+              <option>Peaty</option>
+              <option>Saline</option>
+            </select>
+          </label>
+          <label>Crop
+            <select name="crop" class="w-full border rounded p-2 mt-1">
+              <option>Tomato</option>
+              <option>Wheat</option>
+              <option>Rice</option>
+              <option>Potato</option>
+              <option>Maize</option>
+              <option>Cotton</option>
+              <option>Soybean</option>
+              <option>Sugarcane</option>
+              <option>Chili</option>
+              <option>Coffee</option>
+              <option>Tea</option>
+              <option>Banana</option>
+              <option>Mango</option>
+              <option>Onion</option>
+              <option>Papaya</option>
+            </select>
+          </label>
+        </div>
+
+        <!-- NEW: Temperature + Moisture row -->
+        <div class="grid grid-cols-2 gap-4">
+          <label>Temperature (°C)
+            <input type="number" step="0.1" name="temperature" class="w-full border rounded p-2 mt-1" placeholder="e.g. 20">
+          </label>
+
+          <label>Moisture (%)
+            <input type="number" step="0.1" name="moisture" class="w-full border rounded p-2 mt-1" placeholder="e.g. 35">
+          </label>
+        </div>
+
+        <button class="bg-green-700 hover:bg-green-800 text-white w-full py-2 rounded-lg">
+          Get Recommendations
+        </button>
+      </form>
+
+      <div class="bg-white p-6 rounded-2xl shadow text-center">
+        <h3 class="text-xl font-bold mb-3">pH Sensor</h3>
+        <img src="{{ url_for('ph.static', filename='images/ph_sensor.png') }}"
+             alt="pH Sensor" class="mx-auto w-60 mb-3">
+        <p class="text-gray-600">Use a calibrated pH meter for accurate readings.<br>Ensure the probe is clean and properly maintained.</p>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

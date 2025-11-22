@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Analysis Result</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-green-50 p-6">
+  <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-6 space-y-6">
+    <h1 class="text-2xl font-bold text-green-700">🌿 Hyperspectral Analysis Report</h1>
+
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="bg-gray-100 p-4 rounded-lg">
+        <h2 class="font-semibold text-gray-800 mb-2">Metrics</h2>
+        <ul class="list-disc ml-5 text-sm">
+          <li>Shape: {{ result.shape }}</li>
+          <li>Accuracy: {{ "%.2f%%"|format(result.accuracy*100) if result.accuracy is not none else "N/A" }}</li>
+          <li>NDVI Mean: {{ "%.4f"|format(result.ndvi_mean) }}</li>
+          <li>LCI Mean: {{ "%.4f"|format(result.lci_mean) }}</li>
+        </ul>
+        <p class="mt-2 text-sm text-gray-700"><strong>Summary:</strong> {{ result.analysis_text }}</p>
+      </div>
+
+      <div class="bg-gray-100 p-4 rounded-lg">
+        <h2 class="font-semibold text-gray-800 mb-2">Visualization</h2>
+        <img src="{{ plot_url }}" class="rounded-lg border" alt="overlay">
+      </div>
+    </div>
+
+    <div class="bg-emerald-50 p-4 rounded-lg">
+      <h2 class="font-semibold text-emerald-700 mb-2">🤖 AI Summary (TinyLlama)</h2>
+
+      {% if result.ai_summary.error %}
+        <p class="text-red-600 text-sm">{{ result.ai_summary.error }}</p>
+      {% else %}
+        <div class="text-sm text-gray-800 space-y-2">
+          <p><strong>🩺 Problem Detected:</strong> {{ "Yes" if result.ai_summary.problem_detected else "No" }}</p>
+          <p><strong>⚠️ Severity Level:</strong> {{ result.ai_summary.severity_level or "Unknown" }}</p>
+          <p><strong>🧾 Summary:</strong> {{ result.ai_summary.summary or "—" }}</p>
+          <div>
+            <strong>🌱 Recommendations:</strong>
+            {% if result.ai_summary.recommendations and result.ai_summary.recommendations|length > 0 %}
+              <ul class="list-disc ml-6">
+                {% for r in result.ai_summary.recommendations %}
+                  <li>{{ r }}</li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p class="text-gray-700">No recommendations provided.</p>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+    <a href="/" class="inline-block mt-2 px-4 py-2 bg-green-700 text-white rounded hover:bg-green-800">Analyze another</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Smart Agro • Results</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 font-inter">
+  <nav class="flex items-center justify-between bg-white p-4 shadow">
+    <h1 class="text-2xl font-bold text-green-700">🌿 Smart Agro</h1>
+    <div class="flex items-center gap-4">
+      <a href="{{ url_for('ph.index') }}" class="text-green-700 font-semibold">New Analysis</a>
+    </div>
+  </nav>
+
+  <main class="max-w-5xl mx-auto p-6">
+    <h2 class="text-3xl font-bold mb-6">Analysis Summary</h2>
+
+    <div class="bg-white p-6 rounded-2xl shadow mb-6">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div>
+          <p class="text-sm text-gray-600">Measured pH</p>
+          <p class="font-semibold text-lg">{{ ph }}</p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-600">Soil Type</p>
+          <p class="font-semibold text-lg">{{ soil }}</p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-600">Area (m²)</p>
+          <p class="font-semibold text-lg">{{ area }}</p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-600">Depth (cm)</p>
+          <p class="font-semibold text-lg">{{ depth_cm or 15 }}</p>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        {% if result.status == 'Too Alkaline' %}
+          <span class="px-3 py-1 text-sm bg-yellow-100 text-yellow-700 rounded">Too Alkaline</span>
+        {% elif result.status == 'Too Acidic' %}
+          <span class="px-3 py-1 text-sm bg-red-100 text-red-700 rounded">Too Acidic</span>
+        {% else %}
+          <span class="px-3 py-1 text-sm bg-green-100 text-green-700 rounded">Neutral</span>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Editable quick-recalc card -->
+    <div class="bg-white p-6 rounded-2xl shadow mb-6">
+      <form method="POST" action="{{ url_for('ph.analyze') }}" class="space-y-4">
+        <div class="grid grid-cols-3 gap-4">
+          <label>
+            <span class="text-sm text-gray-600">Temperature (°C)</span>
+            <input name="temperature" value="{{ temperature or '' }}" type="number" step="0.1" class="w-full border rounded p-2">
+          </label>
+          <label>
+            <span class="text-sm text-gray-600">Moisture (%)</span>
+            <input name="moisture" value="{{ moisture or '' }}" type="number" step="0.1" class="w-full border rounded p-2">
+          </label>
+          <label>
+            <span class="text-sm text-gray-600">Organic Matter (%)</span>
+            <input name="organic_matter" value="{{ organic_matter or '' }}" type="number" step="0.1" class="w-full border rounded p-2">
+          </label>
+        </div>
+
+        <div class="flex gap-3 mt-3">
+          <!-- carry other important fields so backend receives full context -->
+          <input type="hidden" name="ph" value="{{ ph }}">
+          <input type="hidden" name="soil" value="{{ soil }}">
+          <input type="hidden" name="area" value="{{ area }}">
+          <input type="hidden" name="depth_cm" value="{{ depth_cm or 15 }}">
+          <button type="submit" class="bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded-lg">Recalculate</button>
+          <a href="{{ url_for('ph.index') }}" class="px-4 py-2 rounded-lg border border-gray-200">Edit All</a>
+        </div>
+      </form>
+    </div>
+
+    <!-- Recommendations block -->
+    <h3 class="text-2xl font-bold mb-3">Recommendations</h3>
+
+    {% if result.status == 'Too Alkaline' %}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-white p-5 rounded-xl shadow">
+          <h4 class="font-bold text-lg text-green-700">Elemental Sulfur</h4>
+          <p class="text-2xl font-semibold text-green-800 mt-1">{{ result.sulfur_g }} g per m²</p>
+          <p class="text-gray-600 mt-2">Per-area: {{ result.sulfur_g }} g/m² · Total ~ {{ (result.sulfur_g|float * area|float)|round(1) }} g</p>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl shadow">
+          <h4 class="font-bold text-lg text-green-700">Aluminum Sulfate</h4>
+          <p class="text-2xl font-semibold text-green-800 mt-1">{{ result.aluminum_sulfate_g }} g per m²</p>
+          <p class="text-gray-600 mt-2">Total ~ {{ (result.aluminum_sulfate_g|float * area|float)|round(1) }} g</p>
+        </div>
+      </div>
+    {% elif result.status == 'Too Acidic' %}
+      <div class="bg-white p-5 rounded-xl shadow">
+        <h4 class="font-bold text-lg text-green-700">Agricultural Lime</h4>
+        <p class="text-2xl font-semibold text-green-800 mt-1">{{ result.lime_g }} g per m²</p>
+        <p class="text-gray-600 mt-2">Total ~ {{ (result.lime_g|float * area|float)|round(1) }} g</p>
+      </div>
+    {% else %}
+      <p class="bg-green-100 text-green-700 p-4 rounded-xl">Soil is within the target range. No treatment required.</p>
+    {% endif %}
+
+    <div class="mt-6 bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+      <strong class="text-yellow-700">Safety</strong>
+      <p class="text-gray-700 mt-2">Use PPE when handling amendments. Follow label instructions.</p>
+    </div>
+
+    <div class="mt-6 text-gray-500 text-sm">
+      <p>Calculated at: {{ timestamp }}</p>
+      <p>Notes: {{ notes or '—' }}</p>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,10 @@
+# from leaf-diseases-detect-main/leaf-diseaes-detect-main/requirements.txt
+groq>=0.31.0
+python-dotenv>=1.0.0
+pathlib2>=2.3.7
+typing-extensions>=4.8.0
+fastapi>=0.116.1
+uvicorn>=0.21.1
+requests>=2.31.0
+python-multipart
+flask>=2.3.2
