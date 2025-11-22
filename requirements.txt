@@ -1,0 +1,23 @@
+# Aggregated requirements from workspace
+# Conflict resolution notes:
+# - Flask pinned to ==3.0.3 (from Ph_Analyzer) because other requirements used >=2.x which is compatible.
+# - requests chosen >=2.31.0 (newer minimum)
+# - python-dotenv chosen >=1.0.0 (newer minimum)
+
+Flask==3.0.3
+requests>=2.31.0
+python-dotenv>=1.0.0
+
+groq>=0.31.0
+pathlib2>=2.3.7
+typing-extensions>=4.8.0
+fastapi>=0.116.1
+uvicorn>=0.21.1
+python-multipart
+
+# ML / numeric / heavy deps
+torch
+numpy
+scikit-learn
+matplotlib
+ollama

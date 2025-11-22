@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Smart Agro</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-50">
+
+  <!-- 🌿 Navbar -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur border-b">
+    <nav class="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="{{ url_for('home') }}" class="flex items-center gap-2">
+        <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-emerald-600 text-white font-bold">🌿</span>
+        <span class="text-lg font-semibold">Smart Agro</span>
+      </a>
+
+      <ul class="hidden md:flex items-center gap-6 text-sm">
+        {% set p = request.path %}
+
+        <!-- Home -->
+        <li>
+          <a href="{{ url_for('home') }}"
+             class="px-3 py-1 rounded {{ 'bg-slate-200' if p == '/' else 'hover:bg-slate-100' }}">
+             Home
+          </a>
+        </li>
+
+        <!-- Leaf Disease (Leaf Blueprint) -->
+        <li>
+          <a href="{{ url_for('leaf.index') }}"
+             class="px-3 py-1 rounded {{ 'bg-slate-200' if p.startswith('/plant/leaf') else 'hover:bg-slate-100' }}">
+             Leaf Disease
+          </a>
+        </li>
+
+        <!-- Plant Disease Detector (Old CNN project) -->
+        <li>
+          <a href="{{ url_for('plant.index') }}"
+             class="px-3 py-1 rounded {{ 'bg-slate-200' if p.startswith('/plant') and not p.startswith('/plant/leaf') else 'hover:bg-slate-100' }}">
+             Hyperspectral analysis
+          </a>
+        </li>
+
+        <!-- pH Analyzer -->
+        <li>
+          <a href="{{ url_for('ph.index') }}"
+             class="px-3 py-1 rounded {{ 'bg-slate-200' if p.startswith('/ph') else 'hover:bg-slate-100' }}">
+             pH Analyzer
+          </a>
+        </li>
+
+        <!-- Chatbot -->
+        <li>
+          <a href="{{ url_for('chatbot.index') }}"
+             class="px-3 py-1 rounded {{ 'bg-slate-200' if p.startswith('/chatbot') else 'hover:bg-slate-100' }}">
+             Chatbot
+          </a>
+        </li>
+
+        <!-- Market Prices -->
+        <li>
+          <a href="{{ url_for('market.index') }}"
+             class="px-3 py-1 rounded {{ 'bg-slate-200' if p.startswith('/market') else 'hover:bg-slate-100' }}">
+             Market Prices
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- 🌾 Hero Section -->
+  <section class="relative">
+    <div class="h-[72vh] min-h-[480px] relative overflow-hidden">
+      <img src="{{ url_for('static', filename='images/hero.jpg') }}" alt="hero"
+           class="absolute inset-0 w-full h-full object-cover" />
+      <div class="absolute inset-0 bg-black/50"></div>
+
+      <div class="relative h-full w-full flex items-center justify-center">
+        <div class="max-w-5xl mx-auto px-6 text-center text-white">
+          <h1 class="text-4xl md:text-6xl font-extrabold leading-tight drop-shadow-lg">
+            Smart Farming with AI Technology
+          </h1>
+
+          <p class="mt-5 text-lg md:text-xl text-slate-200 drop-shadow-md">
+            Empower your agricultural decisions with AI-powered plant disease detection,
+            soil analysis, market insights, and expert guidance.
+          </p>
+
+          <div class="mt-8 flex flex-wrap justify-center gap-4">
+
+            <!-- 🌱 Leaf Disease Detector -->
+            <a href="{{ url_for('leaf.index') }}"
+               class="inline-flex items-center gap-2 px-5 py-3 rounded bg-green-600 text-white font-medium hover:bg-green-700 shadow">
+               🌱 Leaf Disease
+            </a>
+
+            <!-- 📷 Old Plant Disease Detector -->
+            <a href="{{ url_for('plant.index') }}"
+               class="inline-flex items-center gap-2 px-5 py-3 rounded bg-emerald-600 text-white font-medium hover:bg-emerald-700 shadow">
+              📷 Hyperspectral analysis
+            </a>
+
+            <!-- 🧪 pH Analyzer -->
+            <a href="{{ url_for('ph.index') }}"
+               class="inline-flex items-center gap-2 px-5 py-3 rounded bg-lime-700 text-white font-medium hover:bg-lime-800 shadow">
+              🧪 Analyze pH
+            </a>
+
+            <!-- 🤖 Chatbot -->
+            <a href="{{ url_for('chatbot.index') }}"
+               class="inline-flex items-center gap-2 px-5 py-3 rounded bg-slate-800 text-white font-medium hover:bg-slate-900 shadow">
+              🤖 Chatbot
+            </a>
+
+            <!-- 📊 Market Prices -->
+            <a href="{{ url_for('market.index') }}"
+               class="inline-flex items-center gap-2 px-5 py-3 rounded bg-blue-600 text-white font-medium hover:bg-blue-700 shadow">
+              📊 Market Prices
+            </a>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🌱 Footer -->
+  <footer class="py-6 text-center text-sm text-slate-500 border-t">
+    © {{ 2025 }} Smart Agro. All rights reserved.
+  </footer>
+
+</body>
+</html>
