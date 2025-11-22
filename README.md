@@ -85,27 +85,30 @@ It:
 
 ---
 
-##  Installation
+## 🚀 Installation & Setup
 
 ### 1. Clone the repository
 ```bash
 git clone https://github.com/your-username/your-repo.git
 cd your-repo
-2. Install dependencies
-bash
-Copy code
+```
+### 2. Install dependencies
+```bash
 pip install -r requirements.txt
-3. Start the app
-bash
-Copy code
+```
+### 3. Start the app
+```bash
 python main_app.py
-4. Open in browser
-cpp
-Copy code
+```
+### 4. Open in browser
+```cpp
 http://127.0.0.1:5000
+```
 
-License
-MIT License
+---
 
- Acknowledgements
+## License
+This project is licensed under the MIT License. Feel free to use, fork, and contribute.
+
+## Acknowledgements
 Thanks to open-source datasets, tools, and libraries used in this project.
